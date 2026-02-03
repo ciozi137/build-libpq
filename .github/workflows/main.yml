@@ -207,31 +207,37 @@ jobs:
         ninja install
         cp c:\OTHERBIN\openssl64\*.dll d:\postgresql\bin
 
+    - name: Package x86
+      shell: cmd
+      run: |
+        mkdir win32
+        copy d:\postgresql86\bin\libpq.dll win32\
+        copy d:\postgresql86\bin\libssl-3.dll win32\
+        copy d:\postgresql86\bin\libcrypto-3.dll win32\
+        7z a libpq-win32.zip win32\*
+
+    - name: Package x64
+      shell: cmd
+      run: |
+        mkdir win64
+        copy d:\postgresql\bin\libpq.dll win64\
+        copy d:\postgresql\bin\libssl-3-x64.dll win64\
+        copy d:\postgresql\bin\libcrypto-3-x64.dll win64\
+        7z a libpq-win64.zip win64\*
+
     - name: Upload libpq x86
       uses: actions/upload-artifact@v4
       with:
-        name: libpq-x86
-        path: |
-          d:\postgresql86\bin\libpq.dll
-          d:\postgresql86\bin\*.dll
-          d:\postgresql86\lib\libpq.lib
-          d:\postgresql86\include\libpq*.h
-          d:\postgresql86\include\postgres_ext.h
-          d:\postgresql86\include\pg_config*.h
+        name: libpq-win32
+        path: win32\*.dll
         retention-days: 5
         if-no-files-found: error
 
     - name: Upload libpq x64
       uses: actions/upload-artifact@v4
       with:
-        name: libpq-x64
-        path: |
-          d:\postgresql\bin\libpq.dll
-          d:\postgresql\bin\*.dll
-          d:\postgresql\lib\libpq.lib
-          d:\postgresql\include\libpq*.h
-          d:\postgresql\include\postgres_ext.h
-          d:\postgresql\include\pg_config*.h
+        name: libpq-win64
+        path: win64\*.dll
         retention-days: 5
         if-no-files-found: error
 
@@ -243,4 +249,4 @@ jobs:
         draft: false
         prerelease: false
         token: ${{secrets.RELEASE_TOKEN}}
-        artifacts: "d:/postgresql/bin/libpq.dll,d:/postgresql/lib/libpq.lib,d:/postgresql86/bin/libpq.dll,d:/postgresql86/lib/libpq.lib"
+        artifacts: "libpq-win32.zip,libpq-win64.zip"
