@@ -155,12 +155,12 @@ jobs:
     - name: Install Win32 OpenSSL
       if: ${{steps.cacheWin32OpenSSL.outputs.cache-hit != 'true' && steps.cachePostgres.outputs.cache-hit != 'true'}}
       shell: cmd
-      run: Win32OpenSSL.exe /sp /silent /dir=c:\OTHERBIN\openssl32
+      run: ${{github.workspace}}\Win32OpenSSL.exe /sp /silent /dir=c:\OTHERBIN\openssl32
 
     - name: Install Win64 OpenSSL
       if: ${{steps.cacheWin64OpenSSL.outputs.cache-hit != 'true' && steps.cachePostgres.outputs.cache-hit != 'true'}}
       shell: cmd
-      run: Win64OpenSSL.exe /sp /silent /dir=c:\OTHERBIN\openssl64
+      run: ${{github.workspace}}\Win64OpenSSL.exe /sp /silent /dir=c:\OTHERBIN\openssl64
 
     - name: Extract winflexbison
       if: ${{steps.cacheWinFlexBisonZip.outputs.cache-hit != 'true' && steps.cachePostgres.outputs.cache-hit != 'true'}}
