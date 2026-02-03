@@ -2,6 +2,7 @@ name: MSBuild
 run-name: libpq CI - ${{ github.event.head_commit.message }}
 
 on:
+  workflow_dispatch:  # Allows manual runs from GitHub UI
   push:
     branches: [ "main" ]
     tags:
