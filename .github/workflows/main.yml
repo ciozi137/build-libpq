@@ -151,13 +151,14 @@ jobs:
       shell: cmd
       run: |
         printf "C:\\OTHERBIN\\pkgconfiglite\\pkg-config-lite-%PKGCONFIGLITE_VERSION%\\bin" >> %GITHUB_PATH%
+    
     - name: Debug - Check OpenSSL downloads
       if: ${{steps.cacheWin32OpenSSL.outputs.cache-hit != 'true' && steps.cachePostgres.outputs.cache-hit != 'true'}}
       shell: cmd
       run: |
         dir ${{github.workspace}}\*.exe
         echo ---
-        dir ${{github.workspace}}
+        type ${{github.workspace}}\Win32OpenSSL.exe
          
     - name: Install Win32 OpenSSL
       if: ${{steps.cacheWin32OpenSSL.outputs.cache-hit != 'true' && steps.cachePostgres.outputs.cache-hit != 'true'}}
