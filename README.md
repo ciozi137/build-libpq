@@ -27,7 +27,7 @@ This project is largely based on workflow files from the [psqlODBC GitHub reposi
 Builds are triggered in three ways
 1. manually
 2. automatically on any push to `main`
-3. pushing a tag beginning with 'REL-*' (see Naming Convention above)
+3. pushing a tag beginning with `REL-*` (see Naming Convention above)
 
 ## Contact
 [Patrick](https://github.com/ciozi137)
