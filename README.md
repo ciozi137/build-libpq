@@ -29,5 +29,8 @@ Builds are triggered in three ways
 2. automatically on any push to `main`
 3. pushing a tag beginning with `REL-*` (see Naming Convention above)
 
+## PostreSQL Release Notes
+[Current](https://www.postgresql.org/docs/current/release.html)
+
 ## Contact
 [Patrick](https://github.com/ciozi137)
