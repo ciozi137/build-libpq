@@ -37,7 +37,7 @@ jobs:
 
     steps:
     - name: Cache Postgres build output
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       id: cachePostgres
       with:
         path: |
@@ -47,14 +47,14 @@ jobs:
 
     - name: Cache Postgres source
       if: ${{steps.cachePostgres.outputs.cache-hit != 'true'}}
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       id: cachePostgresSource
       with:
         path: postgres
         key: postgres-source-${{env.POSTGRESQL_SOURCE_TAG}}
 
     - name: Get Postgres source
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       if: ${{steps.cachePostgresSource.outputs.cache-hit != 'true' && steps.cachePostgres.outputs.cache-hit != 'true'}}
       with:
         repository: "postgres/postgres.git"
@@ -69,7 +69,7 @@ jobs:
 
     - name: Cache pkgconfiglite
       if: ${{steps.cachePostgres.outputs.cache-hit != 'true'}}
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       id: cachePkgConfigLiteZip
       with:
         path: C:\OTHERBIN\pkgconfiglite
@@ -79,7 +79,7 @@ jobs:
 
     - name: Cache Win32 OpenSSL
       if: ${{steps.cachePostgres.outputs.cache-hit != 'true'}}
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       id: cacheWin32OpenSSL
       with:
         path: C:\OTHERBIN\openssl32
@@ -87,7 +87,7 @@ jobs:
 
     - name: Cache Win64 OpenSSL
       if: ${{steps.cachePostgres.outputs.cache-hit != 'true'}}
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       id: cacheWin64OpenSSL
       with:
         path: C:\OTHERBIN\openssl64
@@ -95,7 +95,7 @@ jobs:
 
     - name: Cache winflexbison
       if: ${{steps.cachePostgres.outputs.cache-hit != 'true'}}
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       id: cacheWinFlexBisonZip
       with:
         path: C:\OTHERBIN\winflexbison
@@ -105,39 +105,19 @@ jobs:
 
     - name: Download Win32 OpenSSL
       if: ${{steps.cacheWin32OpenSSL.outputs.cache-hit != 'true' && steps.cachePostgres.outputs.cache-hit != 'true'}}
-      uses: suisei-cn/actions-download-file@v1.6.0
-      id: downloadWin32OpenSSL
-      with:
-        retry-times: 5
-        url: https://slproweb.com/download/Win32OpenSSL-${{env.OPENSSL_VERSION}}.exe
-        filename: Win32OpenSSL.exe
+      run: curl --retry 5 -L -o Win32OpenSSL.exe "https://slproweb.com/download/Win32OpenSSL-${{env.OPENSSL_VERSION}}.exe"
 
     - name: Download Win64 OpenSSL
       if: ${{steps.cacheWin64OpenSSL.outputs.cache-hit != 'true' && steps.cachePostgres.outputs.cache-hit != 'true'}}
-      uses: suisei-cn/actions-download-file@v1.6.0
-      id: downloadWin64OpenSSL
-      with:
-        retry-times: 5
-        url: https://slproweb.com/download/Win64OpenSSL-${{env.OPENSSL_VERSION}}.exe
-        filename: Win64OpenSSL.exe
+      run: curl --retry 5 -L -o Win64OpenSSL.exe "https://slproweb.com/download/Win64OpenSSL-${{env.OPENSSL_VERSION}}.exe"
 
     - name: Download pkgconfiglite
       if: ${{steps.cachePkgConfigLiteZip.outputs.cache-hit != 'true' && steps.cachePostgres.outputs.cache-hit != 'true'}}
-      uses: suisei-cn/actions-download-file@v1.6.0
-      id: downloadPkgConfigLiteZip
-      with:
-        retry-times: 5
-        url: http://downloads.sourceforge.net/project/pkgconfiglite/${{env.PKGCONFIGLITE_VERSION}}/pkg-config-lite-${{env.PKGCONFIGLITE_VERSION}}_bin-win32.zip
-        filename: pkg-config-lite_bin-win32.zip
+      run: curl --retry 5 -L -o pkg-config-lite_bin-win32.zip "http://downloads.sourceforge.net/project/pkgconfiglite/${{env.PKGCONFIGLITE_VERSION}}/pkg-config-lite-${{env.PKGCONFIGLITE_VERSION}}_bin-win32.zip"
 
     - name: Download winflexbison
       if: ${{steps.cacheWinFlexBisonZip.outputs.cache-hit != 'true' && steps.cachePostgres.outputs.cache-hit != 'true'}}
-      uses: suisei-cn/actions-download-file@v1.6.0
-      id: downloadWinFlexBisonZip
-      with:
-        retry-times: 5
-        url: https://sourceforge.net/projects/winflexbison/files/win_flex_bison-${{env.WINFLEXBISON_VERSION}}.zip
-        filename: win_flex_bison.zip
+      run: curl --retry 5 -L -o win_flex_bison.zip "https://sourceforge.net/projects/winflexbison/files/win_flex_bison-${{env.WINFLEXBISON_VERSION}}.zip"
 
     - name: Extract pkgconfiglite
       if: ${{steps.cachePkgConfigLiteZip.outputs.cache-hit != 'true' && steps.cachePostgres.outputs.cache-hit != 'true'}}
